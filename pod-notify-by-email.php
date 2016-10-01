@@ -1,11 +1,11 @@
 <?php
 /*
-Plugin Name: Pod Notify By Mail 
+Plugin Name: Pod Notify By Email 
 Plugin URI: http://example.com/
-Description: Will add later
+Description: Configure each pod with a different email for notification.
 Version: 0.0.1
-Author: Your Name
-Author URI: http://example.com/
+Author: Fredrik Andersson
+Author URI: http://tremor.se/pod-notify-by-email
 Text Domain: pod-notify-by-email
 License: GPL v2 or later
 */
@@ -44,21 +44,21 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @since 0.0.2
  */
-define( 'POD_NOTIFY_BY_MAIL_SLUG', plugin_basename( __FILE__ ) );
-define( 'POD_NOTIFY_BY_MAIL_URL', plugin_dir_url( __FILE__ ) );
-define( 'POD_NOTIFY_BY_MAIL_DIR', plugin_dir_path( __FILE__ ) );
+define( 'POD_NOTIFY_BY_EMAIL_SLUG', plugin_basename( __FILE__ ) );
+define( 'POD_NOTIFY_BY_EMAIL_URL', plugin_dir_url( __FILE__ ) );
+define( 'POD_NOTIFY_BY_EMAIL_DIR', plugin_dir_path( __FILE__ ) );
 
 /**
- * Pod_Notify_By_Mail class
+ * Pod_Notify_By_Email class
  *
- * @class Pod_Notify_By_Mail The class that holds the entire Pod_Notify_By_Mail plugin
+ * @class Pod_Notify_By_Email The class that holds the entire Pod_Notify_By_Email plugin
  *
  * @since 0.0.1
  */
-class Pod_Notify_By_Mail {
+class Pod_Notify_By_Email {
 
 	/**
-	 * Constructor for the Pod_Notify_By_Mail class
+	 * Constructor for the Pod_Notify_By_Email class
 	 *
 	 * Sets up all the appropriate hooks and actions
 	 * within the plugin.
@@ -76,9 +76,6 @@ class Pod_Notify_By_Mail {
 		// Localize our plugin
 		add_action( 'init', array( $this, 'localization_setup' ) );
 
-		/**
-		 * Scripts/ Styles
-		 */
 		// Loads frontend scripts and styles
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -90,35 +87,13 @@ class Pod_Notify_By_Mail {
 
 		// Add action for pod admin options
 		add_filter( 'pods_admin_setup_edit_options', array( $this, 'add_admin_options' ), 10 , 2 );
-		
-		/**
-		 * Hooks that extend Pods
-		 *
-		 * NOTE: These are some example hooks that are useful for extending Pods, uncomment as needed.
-		 */
-
-		//Example: Add a tab to the pods editor for a CPT Pod called 'jedi
-		//add_filter( 'pods_admin_setup_edit_tabs_post_type_jedi', array( $this, 'jedi_tabs' ), 11, 3 );
-
-		//Example: Add fields to the Pods editor for all Advanced Content Types
-		//add_filter( 'pods_admin_setup_edit_options_advanced', array( $this, 'act_options' ), 11, 2 );
-
-		//Example: Add a submenu item to Pods Admin Menu
-		//add_filter( 'pods_admin_menu', array( $this, 'add_menu' ) );
-
-		/**
-		//Complete Example: Add a tab for all post types and some options inside of it.
-		//See example callbacks below
-		add_filter( 'pods_admin_setup_edit_tabs_post_type', array( $this, 'pt_tab' ), 11, 3 );
-		add_filter( 'pods_admin_setup_edit_options_post_type', array( $this, 'pt_options' ), 12, 2 );
-		*/
-		
+				
 	}
 
 	/**
-	 * Initializes the Pod_Notify_By_Mail() class
+	 * Initializes the Pod_Notify_By_Email() class
 	 *
-	 * Checks for an existing Pod_Notify_By_Mail() instance
+	 * Checks for an existing Pod_Notify_By_Email() instance
 	 * and if it doesn't find one, creates it.
 	 *
 	 * @since 0.0.1
@@ -127,7 +102,7 @@ class Pod_Notify_By_Mail {
 		static $instance = false;
 
 		if ( ! $instance ) {
-			$instance = new Pod_Notify_By_Mail();
+			$instance = new Pod_Notify_By_Email();
 		}
 
 		return $instance;
@@ -158,7 +133,7 @@ class Pod_Notify_By_Mail {
 	 * @since 0.0.1
 	 */
 	public function localization_setup() {
-		load_plugin_textdomain( 'pod-notify-by-email', false, trailingslashit( POD_NOTIFY_BY_MAIL_URL ) . '/languages/' );
+		load_plugin_textdomain( 'pod-notify-by-email', false, trailingslashit( POD_NOTIFY_BY_EMAIL_URL ) . '/languages/' );
 		
 	}
 
@@ -174,12 +149,12 @@ class Pod_Notify_By_Mail {
 		/**
 		 * All styles goes here
 		 */
-		wp_enqueue_style( 'pod-notify-by-email-styles', trailingslashit( POD_NOTIFY_BY_MAIL_URL ) . 'css/front-end.css' );
+		wp_enqueue_style( 'pod-notify-by-email-styles', trailingslashit( POD_NOTIFY_BY_EMAIL_URL ) . 'css/front-end.css' );
 
 		/**
 		 * All scripts goes here
 		 */
-		wp_enqueue_script( 'pod-notify-by-email-scripts', trailingslashit( POD_NOTIFY_BY_MAIL_URL ) . 'js/front-end.js', array( ), false, true );
+		wp_enqueue_script( 'pod-notify-by-email-scripts', trailingslashit( POD_NOTIFY_BY_EMAIL_URL ) . 'js/front-end.js', array( ), false, true );
 
 
 		/**
@@ -231,37 +206,6 @@ class Pod_Notify_By_Mail {
 		
 	}
 
-	/**
-	 * Adds a sub menu page to the Pods admin
-	 *
-	 * @param array $admin_menus The submenu items in Pods Admin menu.
-	 *
-	 * @return mixed
-	 *
-	 * @since 0.0.1
-	 */
-	function add_menu( $admin_menus ) {
-		$admin_menus[ 'pods_extend'] = array(
-			'label' => __( 'Pods Extend', 'pod-notify-by-email' ),
-			'function' => array( $this, 'menu_page' ),
-			'access' => 'manage_options'
-
-		);
-		
-		return $admin_menus;
-		
-	}
-
-	/**
-	 * This is the callback for the menu page. Be sure to create some actual functionality!
-	 *
-	 * @since 0.0.1
-	 */
-	function menu_page() {
-		echo '<h3>Pods Extend</h3>';
-
-	}
-
 	function add_admin_options( $options, $pod ){
 		$pod_notify_by_email_new_enable = array(
 			'label' => __( 'Enable notification of new pod-item.', 'pods' ),
@@ -298,7 +242,7 @@ class Pod_Notify_By_Mail {
 	}
 	
 
-} // Pod_Notify_By_Mail
+} // Pod_Notify_By_Email
 
 /**
  * Initialize class, if Pods is active.
@@ -308,7 +252,7 @@ class Pod_Notify_By_Mail {
 add_action( 'plugins_loaded', 'pods_extend_safe_activate');
 function pods_extend_safe_activate() {
 	if ( defined( 'PODS_VERSION' ) ) {
-		$GLOBALS[ 'Pod_Notify_By_Mail' ] = Pod_Notify_By_Mail::init();
+		$GLOBALS[ 'Pod_Notify_By_Email' ] = Pod_Notify_By_Email::init();
 	}
 
 }
