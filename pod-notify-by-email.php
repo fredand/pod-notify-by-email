@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: Pods Starter Plugin
+Plugin Name: Pod Notify By Mail 
 Plugin URI: http://example.com/
-Description: Description
+Description: Will add later
 Version: 0.0.1
 Author: Your Name
 Author URI: http://example.com/
-Text Domain: pods-extend
+Text Domain: pod-notify-by-email
 License: GPL v2 or later
 */
 
@@ -44,21 +44,21 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @since 0.0.2
  */
-define( 'PODS_EXTEND_SLUG', plugin_basename( __FILE__ ) );
-define( 'PODS_EXTEND_URL', plugin_dir_url( __FILE__ ) );
-define( 'PODS_EXTEND_DIR', plugin_dir_path( __FILE__ ) );
+define( 'POD_NOTIFY_BY_MAIL_SLUG', plugin_basename( __FILE__ ) );
+define( 'POD_NOTIFY_BY_MAIL_URL', plugin_dir_url( __FILE__ ) );
+define( 'POD_NOTIFY_BY_MAIL_DIR', plugin_dir_path( __FILE__ ) );
 
 /**
- * Pods_Extend class
+ * Pod_Notify_By_Mail class
  *
- * @class Pods_Extend The class that holds the entire Pods_Extend plugin
+ * @class Pod_Notify_By_Mail The class that holds the entire Pod_Notify_By_Mail plugin
  *
  * @since 0.0.1
  */
-class Pods_Extend {
+class Pod_Notify_By_Mail {
 
 	/**
-	 * Constructor for the Pods_Extend class
+	 * Constructor for the Pod_Notify_By_Mail class
 	 *
 	 * Sets up all the appropriate hooks and actions
 	 * within the plugin.
@@ -110,9 +110,9 @@ class Pods_Extend {
 	}
 
 	/**
-	 * Initializes the Pods_Extend() class
+	 * Initializes the Pod_Notify_By_Mail() class
 	 *
-	 * Checks for an existing Pods_Extend() instance
+	 * Checks for an existing Pod_Notify_By_Mail() instance
 	 * and if it doesn't find one, creates it.
 	 *
 	 * @since 0.0.1
@@ -121,7 +121,7 @@ class Pods_Extend {
 		static $instance = false;
 
 		if ( ! $instance ) {
-			$instance = new Pods_Extend();
+			$instance = new Pod_Notify_By_Mail();
 		}
 
 		return $instance;
@@ -152,7 +152,7 @@ class Pods_Extend {
 	 * @since 0.0.1
 	 */
 	public function localization_setup() {
-		load_plugin_textdomain( 'pods-extend', false, trailingslashit( PODS_EXTEND_URL ) . '/languages/' );
+		load_plugin_textdomain( 'pod-notify-by-email', false, trailingslashit( POD_NOTIFY_BY_MAIL_URL ) . '/languages/' );
 		
 	}
 
@@ -168,12 +168,12 @@ class Pods_Extend {
 		/**
 		 * All styles goes here
 		 */
-		wp_enqueue_style( 'pods-extend-styles', trailingslashit( PODS_EXTEND_URL ) . 'css/front-end.css' );
+		wp_enqueue_style( 'pod-notify-by-email-styles', trailingslashit( POD_NOTIFY_BY_MAIL_URL ) . 'css/front-end.css' );
 
 		/**
 		 * All scripts goes here
 		 */
-		wp_enqueue_script( 'pods-extend-scripts', trailingslashit( PODS_EXTEND_URL ) . 'js/front-end.js', array( ), false, true );
+		wp_enqueue_script( 'pod-notify-by-email-scripts', trailingslashit( POD_NOTIFY_BY_MAIL_URL ) . 'js/front-end.js', array( ), false, true );
 
 
 		/**
@@ -181,8 +181,8 @@ class Pods_Extend {
 		 *
 		 * Uncomment line below and replace with proper localization variables.
 		 */
-		// $translation_array = array( 'some_string' => __( 'Some string to translate', 'pods-extend' ), 'a_value' => '10' );
-		// wp_localize_script( 'pods-extend-scripts', 'podsExtend', $translation_array ) );
+		// $translation_array = array( 'some_string' => __( 'Some string to translate', 'pod-notify-by-email' ), 'a_value' => '10' );
+		// wp_localize_script( 'pod-notify-by-email-scripts', 'podsExtend', $translation_array ) );
 		
 	}
 
@@ -198,12 +198,12 @@ class Pods_Extend {
 		/**
 		 * All admin styles goes here
 		 */
-		wp_enqueue_style( 'pods-extend-admin-styles', plugins_url( 'css/admin.css', __FILE__ ) );
+		wp_enqueue_style( 'pod-notify-by-email-admin-styles', plugins_url( 'css/admin.css', __FILE__ ) );
 
 		/**
 		 * All admin scripts goes here
 		 */
-		wp_enqueue_script( 'pods-extend-admin-scripts', plugins_url( 'js/admin.js', __FILE__ ), array( ), false, true );
+		wp_enqueue_script( 'pod-notify-by-email-admin-scripts', plugins_url( 'js/admin.js', __FILE__ ), array( ), false, true );
 		
 	}
 
@@ -219,7 +219,7 @@ class Pods_Extend {
 	 * @since 0.0.1
 	 */
 	function pt_tab( $tabs, $pod, $addtl_args ) {
-		$tabs[ 'pods-extend' ] = __( 'Pods Extend Options', 'pods-extend' );
+		$tabs[ 'pod-notify-by-email' ] = __( 'Pods Extend Options', 'pod-notify-by-email' );
 		
 		return $tabs;
 		
@@ -237,22 +237,22 @@ class Pods_Extend {
 	 */
 	function pt_options( $options, $pod  ) {
 
-		$options[ 'pods-extend' ] = array(
+		$options[ 'pod-notify-by-email' ] = array(
 			'example_boolean' => array(
-				'label' => __( 'Enable something?', 'pods-extend' ),
-				'help' => __( 'Helpful info about this option that will appear in its help bubble', 'pods-extend' ),
+				'label' => __( 'Enable something?', 'pod-notify-by-email' ),
+				'help' => __( 'Helpful info about this option that will appear in its help bubble', 'pod-notify-by-email' ),
 				'type' => 'boolean',
 				'default' => true,
 				'boolean_yes_label' => 'Yes'
 			),
 			'example_text' => array(
-				'label' => __( 'Enter some text', 'pods-extend' ),
-				'help' => __( 'Helpful info about this option that will appear in its help bubble', 'pods-extend' ),
+				'label' => __( 'Enter some text', 'pod-notify-by-email' ),
+				'help' => __( 'Helpful info about this option that will appear in its help bubble', 'pod-notify-by-email' ),
 				'type' => 'text',
 				'default' => 'Default text',
 			),
 			'dependency_example' => array(
-				'label' => __( 'Dependency Example', 'pods-extend' ),
+				'label' => __( 'Dependency Example', 'pod-notify-by-email' ),
 				'help' => __( 'When set to true, this field reveals the field "dependent_example".', 'pods' ),
 				'type' => 'boolean',
 				'default' => false,
@@ -260,7 +260,7 @@ class Pods_Extend {
 				'boolean_yes_label' => ''
 			),
 				'dependent_example' => array(
-				'label' => __( 'Dependent Option', 'pods-extend' ),
+				'label' => __( 'Dependent Option', 'pod-notify-by-email' ),
 				'help' => __( 'This field is hidden unless the field "dependency_example" is set to true.', 'pods' ),
 				'type' => 'text',
 				'depends-on' => array( 'dependency_example' => true )
@@ -283,7 +283,7 @@ class Pods_Extend {
 	 */
 	function add_menu( $admin_menus ) {
 		$admin_menus[ 'pods_extend'] = array(
-			'label' => __( 'Pods Extend', 'pods-extend' ),
+			'label' => __( 'Pods Extend', 'pod-notify-by-email' ),
 			'function' => array( $this, 'menu_page' ),
 			'access' => 'manage_options'
 
@@ -304,7 +304,7 @@ class Pods_Extend {
 	}
 
 
-} // Pods_Extend
+} // Pod_Notify_By_Mail
 
 /**
  * Initialize class, if Pods is active.
@@ -314,7 +314,7 @@ class Pods_Extend {
 add_action( 'plugins_loaded', 'pods_extend_safe_activate');
 function pods_extend_safe_activate() {
 	if ( defined( 'PODS_VERSION' ) ) {
-		$GLOBALS[ 'Pods_Extend' ] = Pods_Extend::init();
+		$GLOBALS[ 'Pod_Notify_By_Mail' ] = Pod_Notify_By_Mail::init();
 	}
 
 }

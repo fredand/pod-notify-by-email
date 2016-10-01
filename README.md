@@ -1,4 +1,4 @@
-Pods Starter Plugin
+Pod Notify By Mail
 ===========
 
 A starter plugin for extending Pods' functionality.
@@ -12,15 +12,15 @@ Instructions
 
   You will need to change the name of the plugin in a few simple steps:
 
-    * Rename the base plugin folder name and primary PHP file named 'pods-extend.php' to your plugin's name. Make sure the folder name matches the name of the PHP file (without .php on the end).
+    * Rename the base plugin folder name and primary PHP file named 'pod-notify-by-email.php' to your plugin's name. Make sure the folder name matches the name of the PHP file (without .php on the end).
 
-    * Search for 'pods-extend' and replace with your desired plugin name in all lowercase with dashes between words (if desired).
+    * Search for 'pod-notify-by-email' and replace with your desired plugin name in all lowercase with dashes between words (if desired).
 
-    * Search for 'Pods Starter Plugin' and replace with your plugin's proper name.
+    * Search for 'Pod Notify By Mail' and replace with your plugin's proper name.
 
-    * Search for 'Pods_Extend' and replace with your plugin's proper name with underscores instead of spaces between words.
+    * Search for 'Pod_Notify_By_Mail' and replace with your plugin's proper name with underscores instead of spaces between words.
 
-    * Search for 'PODS_EXTEND' and replace with your plugin's proper name in all caps. This is for constants.
+    * Search for 'POD_NOTIFY_BY_MAIL' and replace with your plugin's proper name in all caps. This is for constants.
 
     * Be sure to set the plugin header meta data. See [https://codex.wordpress.org/Writing_a_Plugin#Names.2C_Files.2C_and_Locations](https://codex.wordpress.org/Writing_a_Plugin#Names.2C_Files.2C_and_Locations).
 
