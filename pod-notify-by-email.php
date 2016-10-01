@@ -85,6 +85,12 @@ class Pod_Notify_By_Mail {
 		// Loads admin scripts and styles
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
+		// Add action for pod post save
+		add_action( 'pods_api_post_save_pod_item', array( $this, 'pod_post_save' ), 10, 3);
+
+		// Add action for pod admin options
+		add_filter( 'pods_admin_setup_edit_options', array( $this, 'add_admin_options' ), 10 , 2 );
+		
 		/**
 		 * Hooks that extend Pods
 		 *
@@ -226,53 +232,6 @@ class Pod_Notify_By_Mail {
 	}
 
 	/**
-	 * Adds options to Pods editor for post types
-	 *
-	 * @param array $options All the options
-	 * @param object $pod Current Pods object.
-	 *
-	 * @return array
-	 *
-	 * @since 0.0.1
-	 */
-	function pt_options( $options, $pod  ) {
-
-		$options[ 'pod-notify-by-email' ] = array(
-			'example_boolean' => array(
-				'label' => __( 'Enable something?', 'pod-notify-by-email' ),
-				'help' => __( 'Helpful info about this option that will appear in its help bubble', 'pod-notify-by-email' ),
-				'type' => 'boolean',
-				'default' => true,
-				'boolean_yes_label' => 'Yes'
-			),
-			'example_text' => array(
-				'label' => __( 'Enter some text', 'pod-notify-by-email' ),
-				'help' => __( 'Helpful info about this option that will appear in its help bubble', 'pod-notify-by-email' ),
-				'type' => 'text',
-				'default' => 'Default text',
-			),
-			'dependency_example' => array(
-				'label' => __( 'Dependency Example', 'pod-notify-by-email' ),
-				'help' => __( 'When set to true, this field reveals the field "dependent_example".', 'pods' ),
-				'type' => 'boolean',
-				'default' => false,
-				'dependency' => true,
-				'boolean_yes_label' => ''
-			),
-				'dependent_example' => array(
-				'label' => __( 'Dependent Option', 'pod-notify-by-email' ),
-				'help' => __( 'This field is hidden unless the field "dependency_example" is set to true.', 'pods' ),
-				'type' => 'text',
-				'depends-on' => array( 'dependency_example' => true )
-			)
-
-		);
-		
-		return $options;
-		
-	}
-
-	/**
 	 * Adds a sub menu page to the Pods admin
 	 *
 	 * @param array $admin_menus The submenu items in Pods Admin menu.
@@ -303,6 +262,41 @@ class Pod_Notify_By_Mail {
 
 	}
 
+	function add_admin_options( $options, $pod ){
+		$pod_notify_by_email_new_enable = array(
+			'label' => __( 'Enable notification of new pod-item.', 'pods' ),
+			'help' => __( 'When enabled and a valid email-address is supplied, this will notify the user with the newly submitted pod-information.', 'pods' ),
+			'type' => 'boolean',
+			'default' => false,
+			'dependency' => true,
+			'boolean_yes_label' => ''
+		);
+		$options[ 'admin-ui' ] [ 'pod_notify_by_email_new_enable' ] = $pod_notify_by_email_new_enable;
+
+
+		$pod_notify_by_new_email_adress = array(
+			'label' => __( 'Send notification to this address when new pod is a submitted.', 'pods' ),
+			'help' => __( 'When a new item is created there will be an email sent to this adress.', 'pods' ),
+			'type' => 'text',
+			'default' => 'user@email.com',
+			'depends-on' => array( 'pod_notify_by_email_new_enable' => true )
+		);
+		$options[ 'admin-ui' ] [ 'pod_notify_by_new_email_adress' ] = $pod_notify_by_new_email_adress;
+		return $options;
+	}
+	
+	function pod_post_save( $pieces, $is_new_item, $id ){
+		if ($is_new_item){
+			// Not working
+		} else {
+			// Not working
+		}
+		
+		$nh_notify_when_new_email = trim($pieces[ 'pod' ][ 'options' ][ 'nh_new_poditem_notify_email']);
+		echo('$nh_notify_when_new_email: ' . $nh_notify_when_new_email);
+		die('asd');
+	}
+	
 
 } // Pod_Notify_By_Mail
 
