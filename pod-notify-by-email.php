@@ -3,7 +3,7 @@
 Plugin Name: Pod Notify By Email 
 Plugin URI: http://example.com/
 Description: Configure each pod with a different email for notification.
-Version: 0.0.1
+Version: 0.0.2
 Author: Fredrik Andersson
 Author URI: http://tremor.se/pod-notify-by-email
 Text Domain: pod-notify-by-email
@@ -87,7 +87,6 @@ class Pod_Notify_By_Email {
 
 		// Add action for pod admin options
 		add_filter( 'pods_admin_setup_edit_options', array( $this, 'add_admin_options' ), 10 , 2 );
-				
 	}
 
 	/**
@@ -155,16 +154,7 @@ class Pod_Notify_By_Email {
 		 * All scripts goes here
 		 */
 		wp_enqueue_script( 'pod-notify-by-email-scripts', trailingslashit( POD_NOTIFY_BY_EMAIL_URL ) . 'js/front-end.js', array( ), false, true );
-
-
-		/**
-		 * Example for setting up text strings from Javascript files for localization
-		 *
-		 * Uncomment line below and replace with proper localization variables.
-		 */
-		// $translation_array = array( 'some_string' => __( 'Some string to translate', 'pod-notify-by-email' ), 'a_value' => '10' );
-		// wp_localize_script( 'pod-notify-by-email-scripts', 'podsExtend', $translation_array ) );
-		
+	
 	}
 
 	/**
@@ -188,24 +178,6 @@ class Pod_Notify_By_Email {
 		
 	}
 
-	/**
-	 * Adds an admin tab to Pods editor for all post types
-	 *
-	 * @param array $tabs The admin tabs
-	 * @param object $pod Current Pods Object
-	 * @param $addtl_args
-	 *
-	 * @return array
-	 *
-	 * @since 0.0.1
-	 */
-	function pt_tab( $tabs, $pod, $addtl_args ) {
-		$tabs[ 'pod-notify-by-email' ] = __( 'Pods Extend Options', 'pod-notify-by-email' );
-		
-		return $tabs;
-		
-	}
-
 	function add_admin_options( $options, $pod ){
 
 		$pod_notify_by_email_new_enable = array(
@@ -217,7 +189,6 @@ class Pod_Notify_By_Email {
 				'boolean_yes_label' => ''
 			);
 			$options[ 'admin-ui' ] [ 'pod_notify_by_email_new_enable' ] = $pod_notify_by_email_new_enable;
-
 
 			$pod_notify_by_new_email_adress = array(
 				'label' => __( 'Send notification to this address when new pod is a submitted.', 'pods' ),
@@ -231,14 +202,22 @@ class Pod_Notify_By_Email {
 	}
 	
 	function pod_post_save( $pieces, $is_new_item, $id ){
+		$pod_notify_by_email_new_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_new_enable'];
+		if ( empty( $pod_notify_by_email_new_enable ) ) { $pod_notify_by_email_new_enable = null; }
+
 		if ($is_new_item){
 			// Not working
+			// If $pod_notify_by_email_new_enable = true then execute here.
 		} else {
 			// Not working
 		}
 		
-		$nh_notify_when_new_email = trim($pieces[ 'pod' ][ 'options' ][ 'nh_new_poditem_notify_email']);
+		// Get email address from options. 
+		// TODO move this into if
+		$nh_notify_when_new_email = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress']);
+		
 		echo('$nh_notify_when_new_email: ' . $nh_notify_when_new_email);
+		dump_debug($pieces);
 		die('asd');
 	}
 	
