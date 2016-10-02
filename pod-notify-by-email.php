@@ -188,7 +188,7 @@ class Pod_Notify_By_Email {
 				'dependency' => true,
 				'boolean_yes_label' => ''
 			);
-			$options[ 'admin-ui' ] [ 'pod_notify_by_email_new_enable' ] = $pod_notify_by_email_new_enable;
+			$options[ 'advanced' ] [ 'pod_notify_by_email_new_enable' ] = $pod_notify_by_email_new_enable;
 
 			$pod_notify_by_new_email_adress = array(
 				'label' => __( 'Send notification to this address when new pod is a submitted.', 'pods' ),
@@ -197,7 +197,7 @@ class Pod_Notify_By_Email {
 				'default' => 'user@email.com',
 				'depends-on' => array( 'pod_notify_by_email_new_enable' => true )
 			);
-			$options[ 'admin-ui' ] [ 'pod_notify_by_new_email_adress' ] = $pod_notify_by_new_email_adress;
+			$options[ 'advanced' ] [ 'pod_notify_by_new_email_adress' ] = $pod_notify_by_new_email_adress;
 			return $options;
 	}
 	
