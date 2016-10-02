@@ -85,8 +85,12 @@ class Pod_Notify_By_Email {
 		// Add action for pod post save
 		add_action( 'pods_api_post_save_pod_item', array( $this, 'pod_post_save' ), 10, 3);
 
-		// Add action for pod admin options
-		add_filter( 'pods_admin_setup_edit_options', array( $this, 'add_admin_options' ), 10 , 2 );
+		// Add options
+		add_filter( 'pods_admin_setup_edit_options', array( $this, 'pt_options' ), 10 , 2 );
+		
+		// Add tab
+		add_filter( 'pods_admin_setup_edit_tabs_post_type', array( $this, 'pt_tab' ), 11, 3 );
+		
 	}
 
 	/**
@@ -177,28 +181,51 @@ class Pod_Notify_By_Email {
 		wp_enqueue_script( 'pod-notify-by-email-admin-scripts', plugins_url( 'js/admin.js', __FILE__ ), array( ), false, true );
 		
 	}
+	
+	function pt_tab( $tabs, $pod, $addtl_args ) {
+		$tabs[ 'pod-notify-by-email' ] = __( 'Notify by email', 'pod-notify-by-email' );
+		
+		return $tabs;
+		
+	}
+	function pt_options( $options, $pod  ) {
 
-	function add_admin_options( $options, $pod ){
-
-		$pod_notify_by_email_new_enable = array(
-				'label' => __( 'Enable notification of new pod-item.', 'pods' ),
-				'help' => __( 'When enabled and a valid email-address is supplied, this will notify the user with the newly submitted pod-information.', 'pods' ),
+		$options[ 'pod-notify-by-email' ] = array(
+			'pod_notify_by_email_new_enable' => array(
+				'label' => __( 'Notification new pod.' ),
+				'help' => __( 'When a new item is created there will be an email sent to this adress.', 'pod-notify-by-email' ),
 				'type' => 'boolean',
 				'default' => false,
 				'dependency' => true,
-				'boolean_yes_label' => ''
-			);
-			$options[ 'advanced' ] [ 'pod_notify_by_email_new_enable' ] = $pod_notify_by_email_new_enable;
-
-			$pod_notify_by_new_email_adress = array(
-				'label' => __( 'Send notification to this address when new pod is a submitted.', 'pods' ),
-				'help' => __( 'When a new item is created there will be an email sent to this adress.', 'pods' ),
+				'boolean_yes_label' => 'Yes'
+			),
+			'pod_notify_by_new_email_adress' => array(
+				'label' => __( 'Send notification to this address when new pod is a submitted.', 'pod-notify-by-email' ),
+				'help' => __( 'When a new item is created there will be an email sent to this adress.', 'pod-notify-by-email' ),
 				'type' => 'text',
 				'default' => 'user@email.com',
 				'depends-on' => array( 'pod_notify_by_email_new_enable' => true )
-			);
-			$options[ 'advanced' ] [ 'pod_notify_by_new_email_adress' ] = $pod_notify_by_new_email_adress;
-			return $options;
+			),
+			'pod_notify_by_email_updated_enable' => array(
+				'label' => __( 'Notification changed pod.', 'pod-notify-by-email' ),
+				'help' => __( 'When a podcontent is changed an email will be sent.', 'pod-notify-by-email' ),
+				'type' => 'boolean',
+				'default' => false,
+				'dependency' => true,
+				'boolean_yes_label' => 'Yes'
+			),
+				'pod_notify_by_updated_email_adress' => array(
+				'label' => __( 'Notification emailaddress.', 'pod-notify-by-email' ),
+				'help' => __( 'When pod-content changes this emailaddress will be notified.', 'pods' ),
+				'type' => 'text',
+				'default' => 'user@email.com',
+				'depends-on' => array( 'pod_notify_by_email_updated_enable' => true )
+			)
+
+		);
+		
+		return $options;
+		
 	}
 	
 	function pod_post_save( $pieces, $is_new_item, $id ){
