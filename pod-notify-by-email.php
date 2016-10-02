@@ -268,6 +268,9 @@ class Pod_Notify_By_Email {
 		}
 		$email = $this->pod_create_email($pieces);
 		
+		//die('end');
+		// Send mail
+		//wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
 		
 	}
 	
@@ -277,13 +280,47 @@ class Pod_Notify_By_Email {
 		// Get email address from options. 
 		// TODO move this into if
 		$nh_notify_when_new_email = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress']);
-		echo('$nh_notify_when_new_email: ' . $nh_notify_when_new_email);
+
 		if(is_email($nh_notify_when_new_email)){
 				$email['to'] = is_email($nh_notify_when_new_email);
 		}
+
+		// Get subject and body from settings.
+		$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_subject'];
+		$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_body'];
 		
-		dump_debug($email);
-		die('asd');
+		
+		// Search ang replace magictags, pod fields
+		foreach ($pieces[ 'fields' ] as $fields){
+			$fullcontent = $fields[ 'name' ] . '=' . $fields[ 'value' ];
+			
+			$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
+			$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
+			
+			// check for fullcontent tag {@pod_notify_by_email_full_pod_content}
+			$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody);
+		}
+		
+		
+		
+		// Search ang replace magictags, object fields
+		/* Err wont compile
+		// Err here.. dont thing objects have name=value relations.
+		foreach ($pieces[ 'pod' ][ 'fields' ][ 'object_fields' ] as $fields){
+			$fullcontent = $fields[ 'name' ] . '=' . $fields[ 'value' ];
+			
+			// TODO Check if value is submitted.
+			$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
+			$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
+			
+			// check for fullcontent tag {@pod_notify_by_email_full_pod_content}
+			$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody);
+		}
+		*/
+		
+		$email[ 'subject' ] = $sendtosubject;
+		$email[ 'body' ] = $sendtobody;
+		
 		return $email;
 		
 	}
