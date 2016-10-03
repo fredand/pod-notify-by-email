@@ -91,6 +91,15 @@ class Pod_Notify_By_Email {
 		// Add tab
 		add_filter( 'pods_admin_setup_edit_tabs_post_type', array( $this, 'pt_tab' ), 11, 3 );
 		
+		
+		require 'plugin-update-checker/plugin-update-checker.php';
+		$className = PucFactory::getLatestClassVersion('PucGitHubChecker');
+		$myUpdateChecker = new $className(
+			'https://github.com/fredand/pod-notify-by-email/',
+			__FILE__,
+			'master'
+		);
+		
 	}
 
 	/**
