@@ -8,7 +8,6 @@ Author: Fredrik Andersson
 Author URI: http://tremor.se/
 Text Domain: pod-notify-by-email
 License: GPL v2 or later
-What: Test
 */
 
 /**
@@ -280,7 +279,7 @@ class Pod_Notify_By_Email {
 		
 		//die('end');
 		// Send mail
-		//wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
+		wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
 		
 	}
 	
