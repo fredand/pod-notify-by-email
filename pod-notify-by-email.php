@@ -8,6 +8,7 @@ Author: Fredrik Andersson
 Author URI: http://tremor.se/pod-notify-by-email
 Text Domain: pod-notify-by-email
 License: GPL v2 or later
+What: Test
 */
 
 /**
