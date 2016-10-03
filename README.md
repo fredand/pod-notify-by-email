@@ -1,8 +1,6 @@
 Pod Notify By Mail
 ===========
 
-`~Current Version:0.0.3~`
-
 This plugin will send an email when a new pod-item is submitted.
 
 Requires Pods 2.3.18 or later. (Please keep this notice in your plugin and set the appropriate version.)
