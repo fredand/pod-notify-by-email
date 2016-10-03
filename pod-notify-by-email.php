@@ -3,7 +3,7 @@
 Plugin Name: Pod Notify By Email 
 Plugin URI: http://example.com/
 Description: Configure each pod with a different email for notification.
-Version: 0.0.2
+Version: 0.0.3
 Author: Fredrik Andersson
 Author URI: http://tremor.se/pod-notify-by-email
 Text Domain: pod-notify-by-email

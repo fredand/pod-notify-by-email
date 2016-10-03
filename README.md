@@ -1,7 +1,7 @@
 Pod Notify By Mail
 ===========
 
-`~Current Version:0.0.2~`
+`~Current Version:0.0.3~`
 
 This plugin will send an email when a new pod-item is submitted.
 
