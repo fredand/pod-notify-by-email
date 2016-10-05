@@ -200,7 +200,8 @@ class Pod_Notify_By_Email {
 	function pt_options( $options, $pod  ) {
 
 		$options[ 'pod-notify-by-email' ] = array(
-			'pod_notify_by_email_new_enable' => array(
+/* Does not work, pod problems (issue: https://github.com/pods-framework/pods/issues/3801)
+		'pod_notify_by_email_new_enable' => array(
 				'label' => __( 'Notification new pod.' ),
 				'help' => __( 'When a new item is created there will be an email sent to this adress. ', 'pods' ),
 				'type' => 'boolean',
@@ -229,10 +230,11 @@ class Pod_Notify_By_Email {
 				'default' => '{@pod_notify_by_email_full_pod_content}',
 				'depends-on' => array( 'pod_notify_by_email_new_enable' => true )
 			),		
+*/
 			// Updated
 			'pod_notify_by_email_updated_enable' => array(
-				'label' => __( 'Notification changed pod.', 'pod-notify-by-email' ),
-				'help' => __( 'When a podcontent is changed an email will be sent.', 'pods' ),
+				'label' => __( 'Notification updated pod.', 'pod-notify-by-email' ),
+				'help' => __( 'When a podcontent is updated an email will be sent.', 'pods' ),
 				'type' => 'boolean',
 				'default' => false,
 				'dependency' => true,
