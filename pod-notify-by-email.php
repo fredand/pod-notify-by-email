@@ -74,13 +74,13 @@ class Pod_Notify_By_Email {
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
 		// Localize our plugin
-		add_action( 'init', array( $this, 'localization_setup' ) );
+		// add_action( 'init', array( $this, 'localization_setup' ) );
 
 		// Loads frontend scripts and styles
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Loads admin scripts and styles
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		// add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
 		// Add action for pod post save
 		add_action( 'pods_api_post_save_pod_item', array( $this, 'pod_post_save' ), 10, 3);
