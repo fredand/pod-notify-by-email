@@ -278,14 +278,6 @@ class Pod_Notify_By_Email {
 		} else { 
 				$email = $this->pod_create_email($pieces,$is_new_item);
 				
-				/*
-				echo '$email[ to ]: ' . $email[ 'to' ] . '<br><br>';
-				echo '$email[ subject ]: ' . $email[ 'subject' ]. '<br><br>';
-				echo '$email[ body ]: ' . $email[ 'body' ]. '<br><br>';
-				die('asdad');
-				*/
-				
-				
 				wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
 				pod_sentmail_notice();
 		}		
