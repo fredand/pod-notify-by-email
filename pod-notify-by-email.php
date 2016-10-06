@@ -268,54 +268,62 @@ class Pod_Notify_By_Email {
 	}
 	
 	function pod_post_save( $pieces, $is_new_item, $id ){
+		
 		$pod_notify_by_email_new_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_new_enable'];
+		
 		if ( empty( $pod_notify_by_email_new_enable ) ) { $pod_notify_by_email_new_enable = null; }
 
-		if ($is_new_item){
-			// Not working
+		if ($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
 			// If $pod_notify_by_email_new_enable = true then execute here.
-		} else {
-			// Not working
-		}
-		$email = $this->pod_create_email($pieces);
-		
-		//die('end');
-		// Send mail
-		wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
-		
+		} else { 
+				$email = $this->pod_create_email($pieces,$is_new_item);
+				
+				/*
+				echo '$email[ to ]: ' . $email[ 'to' ] . '<br><br>';
+				echo '$email[ subject ]: ' . $email[ 'subject' ]. '<br><br>';
+				echo '$email[ body ]: ' . $email[ 'body' ]. '<br><br>';
+				die('asdad');
+				*/
+				
+				
+				wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
+				pod_sentmail_notice();
+		}		
 	}
 	
-	public function pod_create_email ( $pieces ){
+	public function pod_create_email ( $pieces, $is_new_item ){
 		$email = array('subject'=>'', 'body'=>'', 'to'=>'43');
 		
 		// Get email address from options. 
-		// TODO move this into if
-		$nh_notify_when_new_email = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress']);
+		if($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
+			$email['to'] = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress']);
+			$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_subject']; // set default value
+			$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_body']; // set default value
 
-		if(is_email($nh_notify_when_new_email)){
-				$email['to'] = is_email($nh_notify_when_new_email);
-		}
-
-		// Get subject and body from settings.
-		$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_subject'];
-		$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_body'];
-		
-		
-		// Search ang replace magictags, pod fields
-		foreach ($pieces[ 'fields' ] as $fields){
-			$fullcontent = $fields[ 'name' ] . '=' . $fields[ 'value' ];
-			
-			$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
-			$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
-			
-			// check for fullcontent tag {@pod_notify_by_email_full_pod_content}
-			$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody);
+		} else {
+			$email['to'] = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_adress']);
+			$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_subject']; // set default value
+			$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_body']; // set default value
 		}
 		
-		*/
-		
-		$email[ 'subject' ] = $sendtosubject;
-		$email[ 'body' ] = $sendtobody;
+		if(is_email($email['to'])){
+			
+			// Search ang replace magictags, pod fields
+			foreach ($pieces[ 'fields' ] as $fields){
+				$fullcontent = $fields[ 'name' ] . '=' . $fields[ 'value' ];
+				
+				$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
+				$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
+				
+				// check for fullcontent tag {@pod_notify_by_email_full_pod_content}
+				$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody);
+			}	
+
+			$email[ 'subject' ] = $sendtosubject; // Set to values, magic-tags and all.
+			$email[ 'body' ] = $sendtobody; // Set to values, magic-tags and all.
+		} else {
+			pod_no_sentmail_notice();
+		}
 		
 		return $email;
 		
@@ -335,6 +343,25 @@ function pods_extend_safe_activate() {
 	}
 
 }
+
+function pod_no_sentmail_notice() {
+    $message = __( 'Email not sent, check email address.', 'pod-notify-by-email' );
+	?>
+    <div class="updated notice notice-error is-dismissible">
+        <p><?php echo printf($message); ?></p>
+    </div>
+    <?php
+}
+add_action( 'admin_notices', 'pod_sentmail_notice' );
+
+function pod_sentmail_notice() {
+	?>
+    <div class="updated notice notice-success is-dismissible">
+        <p><?php _e('Notification email sent.', 'pod-notify-by-email' ); ?></p>
+    </div>
+    <?php
+}
+add_action( 'admin_notices', 'pod_sentmail_notice' );
 
 
 /**
