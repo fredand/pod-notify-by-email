@@ -74,7 +74,7 @@ class Pod_Notify_By_Email {
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
 		// Localize our plugin
-		// add_action( 'init', array( $this, 'localization_setup' ) );
+		add_action( 'init', array( $this, 'localization_setup' ) );
 
 		// Loads frontend scripts and styles
 		// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -312,20 +312,6 @@ class Pod_Notify_By_Email {
 			$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody);
 		}
 		
-		
-		// Search ang replace magictags, object fields
-		/* Err wont compile
-		// Err here.. dont thing objects have name=value relations.
-		foreach ($pieces[ 'pod' ][ 'fields' ][ 'object_fields' ] as $fields){
-			$fullcontent = $fields[ 'name' ] . '=' . $fields[ 'value' ];
-			
-			// TODO Check if value is submitted.
-			$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
-			$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
-			
-			// check for fullcontent tag {@pod_notify_by_email_full_pod_content}
-			$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody);
-		}
 		*/
 		
 		$email[ 'subject' ] = $sendtosubject;
