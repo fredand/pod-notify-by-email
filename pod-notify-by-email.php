@@ -85,9 +85,9 @@ class Pod_Notify_By_Email {
 		// Add action for pod post save
 		add_action( 'pods_api_post_save_pod_item', array( $this, 'pod_post_save' ), 10, 3);
 
-		// Add options
-		add_filter( 'pods_admin_setup_edit_options', array( $this, 'pt_options' ), 10 , 2 );
-		
+		// Add custom options
+		add_filter( 'pods_admin_setup_edit_options', array( $this, 'pt_custom_options' ), 10 , 2 );
+				
 		// Add tab
 		add_filter( 'pods_admin_setup_edit_tabs_post_type', array( $this, 'pt_tab' ), 11, 3 );
 		
@@ -197,35 +197,36 @@ class Pod_Notify_By_Email {
 		return $tabs;
 		
 	}
-	function pt_options( $options, $pod  ) {
-
+	
+	
+	function pt_custom_options( $options, $pod  ) {
 		$options[ 'pod-notify-by-email' ] = array(
 /* Does not work, pod problems (issue: https://github.com/pods-framework/pods/issues/3801)
 		'pod_notify_by_email_new_enable' => array(
 				'label' => __( 'Notification new pod.' ),
-				'help' => __( 'When a new item is created there will be an email sent to this adress. ', 'pods' ),
+				'help' => __( 'When a new item is created there will be an email sent to this adress. ', 'pod-notify-by-email' ),
 				'type' => 'boolean',
 				'default' => false,
 				'dependency' => true,
 				'boolean_yes_label' => 'Yes'
 			),
 			'pod_notify_by_new_email_adress' => array(
-				'label' => __( 'New email.', 'pods' ),
-				'help' => __( 'Send notification to this address when new pod is a submitted.', 'pods' ),
+				'label' => __( 'New email.', 'pod-notify-by-email' ),
+				'help' => __( 'Send notification to this address when new pod is a submitted.', 'pod-notify-by-email' ),
 				'type' => 'text',
 				'default' => 'user@email.com',
 				'depends-on' => array( 'pod_notify_by_email_new_enable' => true )
 			),
 				'pod_notify_by_new_email_subject' => array(
 				'label' => __( 'New subject.', 'pod-notify-by-email' ),
-				'help' => __( 'Notification email subject, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".', 'pods' ),
+				'help' => __( 'Notification email subject, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".', 'pod-notify-by-email' ),
 				'type' => 'text',
 				'default' => 'Newly submitted pod: {@post_title}',
 				'depends-on' => array( 'pod_notify_by_email_new_enable' => true )
 			),
 				'pod_notify_by_new_email_body' => array(
 				'label' => __( 'New body.', 'pod-notify-by-email' ),
-				'help' => __( 'Notification email body, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".</br> Note: the magic tag "<b>{@pod_notify_by_email_full_pod_content}</b>" can be used for displaying all submitted data.', 'pods' ),
+				'help' => __( 'Notification email body, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".</br> Note: the magic tag "<b>{@pod_notify_by_email_full_pod_content}</b>" can be used for displaying all submitted data.', 'pod-notify-by-email' ),
 				'type' => 'paragraph',
 				'default' => '{@pod_notify_by_email_full_pod_content}',
 				'depends-on' => array( 'pod_notify_by_email_new_enable' => true )
@@ -234,7 +235,7 @@ class Pod_Notify_By_Email {
 			// Updated
 			'pod_notify_by_email_updated_enable' => array(
 				'label' => __( 'Notification updated pod.', 'pod-notify-by-email' ),
-				'help' => __( 'When a podcontent is updated an email will be sent.', 'pods' ),
+				'help' => __( 'When a podcontent is updated an email will be sent.', 'pod-notify-by-email' ),
 				'type' => 'boolean',
 				'default' => false,
 				'dependency' => true,
@@ -242,21 +243,21 @@ class Pod_Notify_By_Email {
 			), 
 				'pod_notify_by_updated_email_adress' => array(
 				'label' => __( 'Updated email.', 'pod-notify-by-email' ),
-				'help' => __( 'Updated email.', 'pods' ),
+				'help' => __( 'Updated email.', 'pod-notify-by-email' ),
 				'type' => 'text',
 				'default' => 'user@email.com',
 				'depends-on' => array( 'pod_notify_by_email_updated_enable' => true )
 			),
 				'pod_notify_by_updated_email_subject' => array(
 				'label' => __( 'Updated subject.', 'pod-notify-by-email' ),
-				'help' => __( 'Notification email subject, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".', 'pods' ),
+				'help' => __( 'Notification email subject, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".', 'pod-notify-by-email' ),
 				'type' => 'text',
 				'default' => 'Changed pod: {@post_title}',
 				'depends-on' => array( 'pod_notify_by_email_updated_enable' => true )
 			),
 				'pod_notify_by_updated_email_body' => array(
 				'label' => __( 'Updated body.', 'pod-notify-by-email' ),
-				'help' => __( 'Notification email body, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".</br> Note: the magic tag "<b>{@pod_notify_by_email_full_pod_content}</b>" can be used for displaying all submitted data.', 'pods' ),
+				'help' => __( 'Notification email body, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".</br> Note: the magic tag "<b>{@pod_notify_by_email_full_pod_content}</b>" can be used for displaying all submitted data.', 'pod-notify-by-email' ),
 				'type' => 'paragraph',
 				'default' => '{@pod_notify_by_email_full_pod_content}',
 				'depends-on' => array( 'pod_notify_by_email_updated_enable' => true )
@@ -274,12 +275,15 @@ class Pod_Notify_By_Email {
 		if ( empty( $pod_notify_by_email_new_enable ) ) { $pod_notify_by_email_new_enable = null; }
 
 		if ($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
-			// If $pod_notify_by_email_new_enable = true then execute here.
+			// TODO If $pod_notify_by_email_new_enable = true then execute here.
 		} else { 
 				$email = $this->pod_create_email($pieces,$is_new_item);
 				
-				wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
-				pod_sentmail_notice();
+				if(is_email($email['to'])){
+					wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
+					pod_sentmail_notice();				
+				}
+				
 		}		
 	}
 	
@@ -299,16 +303,13 @@ class Pod_Notify_By_Email {
 		}
 		
 		if(is_email($email['to'])){
-			
-			// Search ang replace magictags, pod fields
-			foreach ($pieces[ 'fields' ] as $fields){
+			foreach ($pieces[ 'fields' ] as $fields){ // Search ang replace magictags, pod fields
 				$fullcontent = $fields[ 'name' ] . '=' . $fields[ 'value' ];
 				
 				$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
 				$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
 				
-				// check for fullcontent tag {@pod_notify_by_email_full_pod_content}
-				$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody);
+				$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody); // check for fullcontent tag {@pod_notify_by_email_full_pod_content}
 			}	
 
 			$email[ 'subject' ] = $sendtosubject; // Set to values, magic-tags and all.
