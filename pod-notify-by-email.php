@@ -271,25 +271,37 @@ class Pod_Notify_By_Email {
 	function pod_post_save( $pieces, $is_new_item, $id ){
 		
 		$pod_notify_by_email_new_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_new_enable'];
+		$pod_notify_by_email_updated_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_updated_enable'];
 		
+	
 		if ( empty( $pod_notify_by_email_new_enable ) ) { $pod_notify_by_email_new_enable = null; }
+		if ( empty( $pod_notify_by_email_updated_enable ) ) { $pod_notify_by_email_updated_enable = null; }
+		if ( empty( $is_new_item ) ) { $is_new_item = null; }
 
 		if ($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
 			// TODO If $pod_notify_by_email_new_enable = true then execute here.
 		} else { 
-				$email = $this->pod_create_email($pieces,$is_new_item);
-				
-				if(is_email($email['to'])){
-					wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
-					pod_sentmail_notice();				
+				if($pod_notify_by_email_updated_enable){
+					$email = $this->pod_create_email($pieces,$is_new_item);
+					
+					if(is_email($email['to'])){
+						wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
+						add_action( 'admin_notices', 'pod_sentmail_notice' );			
+					} else {
+						add_action( 'admin_notices', 'pod_no_sentmail_notice' );
+					}					
 				}
 				
 		}		
 	}
 	
 	public function pod_create_email ( $pieces, $is_new_item ){
-		$email = array('subject'=>'', 'body'=>'', 'to'=>'43');
+		$email = array('subject'=>'', 'body'=>'', 'to'=>'');
 		
+		
+		$supports_title = $pieces[ 'pod' ][ 'options' ][ 'supports_title'];
+		if ( empty( $supports_title ) ) { $supports_title = null; }
+			
 		// Get email address from options. 
 		if($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
 			$email['to'] = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress']);
@@ -308,14 +320,21 @@ class Pod_Notify_By_Email {
 				
 				$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
 				$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
-				
-				$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody); // check for fullcontent tag {@pod_notify_by_email_full_pod_content}
-			}	
-
+			}
+			
+			
+			
+			// Standard wordpress fields.
+			if($supports_title){
+				$post_title = get_the_title($pieces[ 'params' ]->id);
+				$sendtobody = str_replace('{@post_title}',$post_title,$sendtobody);
+				$fullcontent = 'post_title' . '=' . $post_title;
+			}
+			
+			$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody); // check for fullcontent tag {@pod_notify_by_email_full_pod_content}
+			
 			$email[ 'subject' ] = $sendtosubject; // Set to values, magic-tags and all.
-			$email[ 'body' ] = $sendtobody; // Set to values, magic-tags and all.
-		} else {
-			pod_no_sentmail_notice();
+			$email[ 'body' ] = $sendtobody; // Set to values, magic-tags and all.		
 		}
 		
 		return $email;
@@ -345,17 +364,14 @@ function pod_no_sentmail_notice() {
     </div>
     <?php
 }
-add_action( 'admin_notices', 'pod_sentmail_notice' );
 
 function pod_sentmail_notice() {
 	?>
-    <div class="updated notice notice-success is-dismissible">
+    <div class="updated notice notice-success  is-dismissible"">
         <p><?php _e('Notification email sent.', 'pod-notify-by-email' ); ?></p>
     </div>
     <?php
 }
-add_action( 'admin_notices', 'pod_sentmail_notice' );
-
 
 /**
  * Throw admin nag if Pods isn't activated.
