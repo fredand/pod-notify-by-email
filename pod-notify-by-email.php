@@ -90,7 +90,9 @@ class Pod_Notify_By_Email {
 				
 		// Add tab
 		add_filter( 'pods_admin_setup_edit_tabs_post_type', array( $this, 'pt_tab' ), 11, 3 );
-		
+
+		// Add settings for whole plugin
+		add_action( 'admin_init', 'pods_settings_api_init' );
 		
 		require 'plugin-update-checker/plugin-update-checker.php';
 		$className = PucFactory::getLatestClassVersion('PucGitHubChecker');
@@ -269,7 +271,6 @@ class Pod_Notify_By_Email {
 	}
 	
 	function pod_post_save( $pieces, $is_new_item, $id ){
-		
 		$pod_notify_by_email_new_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_new_enable'];
 		$pod_notify_by_email_updated_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_updated_enable'];
 		
@@ -277,13 +278,13 @@ class Pod_Notify_By_Email {
 		if ( empty( $pod_notify_by_email_new_enable ) ) { $pod_notify_by_email_new_enable = null; }
 		if ( empty( $pod_notify_by_email_updated_enable ) ) { $pod_notify_by_email_updated_enable = null; }
 		if ( empty( $is_new_item ) ) { $is_new_item = null; }
-
+		
 		if ($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
 			// TODO If $pod_notify_by_email_new_enable = true then execute here.
 		} else { 
-				if($pod_notify_by_email_updated_enable){
+
+		if($pod_notify_by_email_updated_enable){
 					$email = $this->pod_create_email($pieces,$is_new_item);
-					
 					if(is_email($email['to'])){
 						wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
 						add_action( 'admin_notices', 'pod_sentmail_notice' );			
@@ -293,6 +294,7 @@ class Pod_Notify_By_Email {
 				}
 				
 		}		
+		die('vava');
 	}
 	
 	public function pod_create_email ( $pieces, $is_new_item ){
@@ -338,8 +340,8 @@ class Pod_Notify_By_Email {
 		}
 		
 		return $email;
-		
 	}
+ 
 	
 } // Pod_Notify_By_Email
 
