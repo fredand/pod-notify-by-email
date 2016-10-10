@@ -252,14 +252,14 @@ class Pod_Notify_By_Email {
 			),
 				'pod_notify_by_updated_email_subject' => array(
 				'label' => __( 'Updated subject.', 'pod-notify-by-email' ),
-				'help' => __( 'Notification email subject, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".', 'pod-notify-by-email' ),
+				'help' => __( 'Notification email subject, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>" (including standard post_title).', 'pod-notify-by-email' ),
 				'type' => 'text',
 				'default' => 'Changed pod: {@post_title}',
 				'depends-on' => array( 'pod_notify_by_email_updated_enable' => true )
 			),
 				'pod_notify_by_updated_email_body' => array(
 				'label' => __( 'Updated body.', 'pod-notify-by-email' ),
-				'help' => __( 'Notification email body, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".</br> Note: the magic tag "<b>{@pod_notify_by_email_full_pod_content}</b>" can be used for displaying all submitted data.', 'pod-notify-by-email' ),
+				'help' => __( 'Notification email body, you can use "<a href="http://pods.io/glossary/magic-tags/" target="_new">magic tag</a>".</br> Note: the magic tag (including standard post_title) "<b>{@pod_notify_by_email_full_pod_content}</b>" can be used for displaying all submitted data.', 'pod-notify-by-email' ),
 				'type' => 'paragraph',
 				'default' => '{@pod_notify_by_email_full_pod_content}',
 				'depends-on' => array( 'pod_notify_by_email_updated_enable' => true )
