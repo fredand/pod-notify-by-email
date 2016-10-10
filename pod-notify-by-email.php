@@ -298,12 +298,9 @@ class Pod_Notify_By_Email {
 	}
 	
 	public function pod_create_email ( $pieces, $is_new_item ){
+		// Prepare array.
 		$email = array('subject'=>'', 'body'=>'', 'to'=>'');
 		
-		
-		$supports_title = $pieces[ 'pod' ][ 'options' ][ 'supports_title'];
-		if ( empty( $supports_title ) ) { $supports_title = null; }
-			
 		// Get email address from options. 
 		if($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
 			$email['to'] = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress']);
@@ -324,14 +321,16 @@ class Pod_Notify_By_Email {
 				$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
 			}
 			
-			
-			
-			// Standard wordpress fields.
+			// Start Standard wordpress fields.
+			$supports_title = $pieces[ 'pod' ][ 'options' ][ 'supports_title'];
+			if ( empty( $supports_title ) ) { $supports_title = null; }		
+
 			if($supports_title){
 				$post_title = get_the_title($pieces[ 'params' ]->id);
 				$sendtobody = str_replace('{@post_title}',$post_title,$sendtobody);
 				$fullcontent = 'post_title' . '=' . $post_title;
 			}
+			// End Standard wordpress fields.
 			
 			$sendtobody = str_replace('{@pod_notify_by_email_full_pod_content}',$fullcontent,$sendtobody); // check for fullcontent tag {@pod_notify_by_email_full_pod_content}
 			
