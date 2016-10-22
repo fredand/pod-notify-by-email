@@ -326,7 +326,7 @@ class Pod_Notify_By_Email {
 
 			if($supports_title){
 				$post_title = get_the_title($pieces[ 'params' ]->id);
-				$sendtobody = str_replace('{@post_title}',$post_title,$sendtobody);
+				$sendtosubject = str_replace('{@post_title}',$post_title,$sendtosubject);
 				$fullcontent = 'post_title' . '=' . $post_title;
 			}
 			// End Standard wordpress fields.
