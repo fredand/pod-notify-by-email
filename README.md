@@ -28,6 +28,13 @@ Standard wordpress fields
   
 In the body of the email you can use "{@pod_notify_by_email_full_pod_content}"  for a ascii formatted detailed view of all submitted fields.
   
+  
+Issues
+======
+	Magic-tags to related fields is untested.
+	Some magic-tags fields like checkboxes don't work.
+  
+  
 Notes and License
 ==================
 
