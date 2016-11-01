@@ -11,7 +11,7 @@ License: GPL v2 or later
 */
 
 /**
- * Copyright (c) YEAR Your Name (email: Email). All rights reserved.
+ * Copyright (c) 2016 Fredrik Andersson (email: fredand@gmail.com). All rights reserved.
  *
  * Released under the GPL license
  * http://www.opensource.org/licenses/gpl-license.php
@@ -271,21 +271,21 @@ class Pod_Notify_By_Email {
 	}
 	
 	function pod_post_save( $pieces, $is_new_item, $id ){
-		$pod_notify_by_email_new_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_new_enable'];
-		$pod_notify_by_email_updated_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_updated_enable'];
+		$pod_notify_by_email_new_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_new_enable' ];
+		$pod_notify_by_email_updated_enable = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_email_updated_enable' ];
 		
 	
 		if ( empty( $pod_notify_by_email_new_enable ) ) { $pod_notify_by_email_new_enable = null; }
 		if ( empty( $pod_notify_by_email_updated_enable ) ) { $pod_notify_by_email_updated_enable = null; }
 		if ( empty( $is_new_item ) ) { $is_new_item = null; }
 		
-		if ($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
+		if ( $is_new_item ){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
 			// TODO If $pod_notify_by_email_new_enable = true then execute here.
 		} else { 
 
-		if($pod_notify_by_email_updated_enable){
-					$email = $this->pod_create_email($pieces,$is_new_item);
-					if(is_email($email['to'])){
+		if ( $pod_notify_by_email_updated_enable ){
+					$email = $this->pod_create_email( $pieces , $is_new_item );
+					if( is_email( $email['to'] ) ){
 						wp_mail( $email[ 'to' ], $email[ 'subject' ], $email[ 'body' ], null, null );
 						add_action( 'admin_notices', 'pod_sentmail_notice' );			
 					} else {
@@ -302,21 +302,21 @@ class Pod_Notify_By_Email {
 		
 		// Get email address from options. 
 		if($is_new_item){ // Not working (issue: https://github.com/pods-framework/pods/issues/3801)
-			$email['to'] = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress']);
-			$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_subject']; // set default value
-			$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_body']; // set default value
+			$email['to'] = trim( $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_adress' ] );
+			$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_subject' ]; // set default value
+			$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_new_email_body' ]; // set default value
 
 		} else {
-			$email['to'] = trim($pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_adress']);
-			$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_subject']; // set default value
-			$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_body']; // set default value
+			$email['to'] = trim( $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_adress' ] );
+			$sendtosubject = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_subject' ]; // set default value
+			$sendtobody = $pieces[ 'pod' ][ 'options' ][ 'pod_notify_by_updated_email_body' ]; // set default value
 		}
 		
-		if(is_email($email['to'])){
-			foreach ($pieces[ 'fields' ] as $fields){ // Search ang replace magictags, pod fields
+		if( is_email( $email['to'] ) ){
+			foreach ( $pieces[ 'fields' ] as $fields ){ // Search ang replace magictags, pod fields
 				$fullcontent = $fields[ 'name' ] . '=' . $fields[ 'value' ];
-				$sendtosubject = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtosubject);
-				$sendtobody = str_replace('{@' . $fields[ 'name' ] . '}',$fields[ 'value' ],$sendtobody);
+				$sendtosubject = str_replace( '{@' . $fields[ 'name' ] . '}' , $fields[ 'value' ] , $sendtosubject );
+				$sendtobody = str_replace( '{@' . $fields[ 'name' ] . '}' , $fields[ 'value' ] , $sendtobody );
 			}
 			
 			// Start Standard wordpress fields.
@@ -324,7 +324,7 @@ class Pod_Notify_By_Email {
 			if ( empty( $supports_title ) ) { $supports_title = null; }		
 
 			if($supports_title){
-				$post_title = get_the_title($pieces[ 'params' ]->id);
+				$post_title = get_the_title( $pieces[ 'params' ]->id );
 				$sendtosubject = str_replace( '{@post_title}' , $post_title , $sendtosubject );
 				$fullcontent .= 'post_title' . '=' . $post_title;
 			}
