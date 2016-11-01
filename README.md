@@ -12,7 +12,7 @@ Put in wordpress plugin directory, and enable plugin.
 
 * Usage
 
-  * You enable the notification on the "advanced options" tab of each pod, look for "Enable notification of new pod-item."
+  * You enable the notification on the edit pods option and the "Notify by email" tab of each pod, look for "Notification updated pod."
 
 Notes and License
 ==================
